@@ -32,6 +32,10 @@ class MainActivity : ComponentActivity() {
                 startDestination = startDestination,
                 modifier = Modifier.fillMaxSize()
             ){
+                @Composable
+                fun (modifier: Modifier) {
+                    
+                }
                 composable(route = "login") {
                     LoginScreen()
                 }
