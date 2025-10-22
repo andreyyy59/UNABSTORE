@@ -3,12 +3,12 @@ package me.andreymorales.unabstore
 
 import android.util.Patterns
 
-//returnar un true si es valido y un flase si no esvalido
+//returnar un true si es valido y una frase si no es
 //tambien retorne una cadena que me diga que paso si no es valido
 
 fun validateEmail(email: String): Pair<Boolean, String>{
     return when{
-        email.isEmpty() -> Pair(false, "El corre es requerido.")
+        email.isEmpty() -> Pair(false, "El correo es requerido.")
         !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> Pair(false, "El correo es invalido")
         !email.endsWith("@test.com")-> Pair(false, "Ese email no es corporativo.")
         else -> Pair (true, "")
