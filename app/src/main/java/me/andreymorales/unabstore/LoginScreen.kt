@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -72,9 +73,10 @@ fun LoginScreen(onClickRegister: () -> Unit = {}, onSuccessfulLogin: () -> Unit 
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            // Ícono de Usuario (Material Icons)
             Image(
-                imageVector = Icons.Default.Person,
-                contentDescription = "icon login",
+                painter = painterResource(id = R.drawable.img_icon_unab),
+                contentDescription = "Usuario",
                 modifier = Modifier.size(200.dp)
             )
             Text(
