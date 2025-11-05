@@ -5,18 +5,19 @@ import com.google.firebase.firestore.firestore
 
 class FirestoreRepository {
 
-    private val db = Firebase.firestore
-    private val collection = db.collection("productos")
-
     fun agregarProducto(producto: Producto) {
         val db = Firebase.firestore
         db.collection("productos")
             .add(producto)
-            .addOnSuccessListener { /* manejar éxito */ }
-            .addOnFailureListener { /* manejar error */ }
+            .addOnSuccessListener {
+                println("✅ Producto guardado exitosamente")
+            }
+            .addOnFailureListener {
+                println("❌ Error al guardar producto: ${it.message}")
+            }
     }
 
-    fun obtenerProductos(callback: (List) -> Unit) {
+    fun obtenerProductos(callback: (List<Producto>) -> Unit) {
         val db = Firebase.firestore
         db.collection("productos")
             .get()
@@ -26,11 +27,21 @@ class FirestoreRepository {
                 }
                 callback(productos)
             }
+            .addOnFailureListener {
+                println("❌ Error al obtener productos: ${it.message}")
+                callback(emptyList())
+            }
     }
 
-    fun eliminarProducto(id: String, function: (ERROR) -> Unit) {
+    fun eliminarProducto(id: String) {
         val db = Firebase.firestore
         db.collection("productos").document(id)
             .delete()
+            .addOnSuccessListener {
+                println("🗑️ Producto eliminado exitosamente")
+            }
+            .addOnFailureListener {
+                println("❌ Error al eliminar producto: ${it.message}")
+            }
     }
 }
