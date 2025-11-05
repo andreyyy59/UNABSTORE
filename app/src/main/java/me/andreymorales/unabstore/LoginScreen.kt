@@ -80,12 +80,20 @@ fun LoginScreen(onClickRegister: () -> Unit = {}, onSuccessfulLogin: () -> Unit 
                 contentDescription = "Usuario",
                 modifier = Modifier.size(200.dp)
             )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Título
             Text(
-                "Iniciar Sesión", fontSize = 28.sp,
+                text = "Iniciar Sesión",
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFFF9900)
             )
+
             Spacer(modifier = Modifier.height(24.dp))
+
+            // Campo de Correo Electrónico
             OutlinedTextField(
                 value = inputEmail,
                 onValueChange = { inputEmail = it },
@@ -113,6 +121,8 @@ fun LoginScreen(onClickRegister: () -> Unit = {}, onSuccessfulLogin: () -> Unit 
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Campo de Contraseña
             OutlinedTextField(
                 value = inputPassword,
                 onValueChange = { inputPassword = it },
@@ -152,7 +162,7 @@ fun LoginScreen(onClickRegister: () -> Unit = {}, onSuccessfulLogin: () -> Unit 
                         .padding(bottom = 8.dp)
                 )
             }
-
+            // Botón de Iniciar Sesión
             Button(
                 onClick = {
 
@@ -193,6 +203,8 @@ fun LoginScreen(onClickRegister: () -> Unit = {}, onSuccessfulLogin: () -> Unit 
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+
+            // Enlace para Registrarse
             TextButton(onClick = onClickRegister) {
                 Text(
                     "¿No tienes una cuenta? Regístrate",
