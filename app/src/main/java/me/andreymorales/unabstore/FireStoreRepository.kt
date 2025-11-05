@@ -1,8 +1,7 @@
 package me.andreymorales.unabstore
 
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import me.andreymorales.unabstore.Producto
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class FirestoreRepository {
 
@@ -29,7 +28,7 @@ class FirestoreRepository {
             }
     }
 
-    fun eliminarProducto(id: String) {
+    fun eliminarProducto(id: String, function: (ERROR) -> Unit) {
         val db = Firebase.firestore
         db.collection("productos").document(id)
             .delete()
