@@ -17,14 +17,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import me.andreymorales.unabstore.ui.theme.UNABSTORETheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(this)
+        FirebaseFirestore.getInstance() //Inicializa la base de datos
+
         enableEdgeToEdge()
-        setContent {
+        setContent{
+
 
             val navController = rememberNavController()
             var startDestination = "login"
@@ -60,12 +67,16 @@ class MainActivity : ComponentActivity() {
                     })
                 }
                 composable("home") {
-                    HomeScreen(onClickLogout = {
-                        navController.navigate("login") {
-                            popUpTo(0)
+                    HomeScreen(
+                        repo = FirestoreRepository(),
+                        onClickLogout = {
+                            navController.navigate("login") {
+                                popUpTo(0)
+                            }
                         }
-                    })
+                    )
                 }
+
             }
         }
     }

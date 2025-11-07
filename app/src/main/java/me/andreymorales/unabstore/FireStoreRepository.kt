@@ -10,10 +10,10 @@ class FirestoreRepository {
         db.collection("productos")
             .add(producto)
             .addOnSuccessListener {
-                println("✅ Producto guardado exitosamente")
+                println("Producto guardado exitosamente")
             }
             .addOnFailureListener {
-                println("❌ Error al guardar producto: ${it.message}")
+                println("Error al guardar producto: ${it.message}")
             }
     }
 
@@ -28,7 +28,7 @@ class FirestoreRepository {
                 callback(productos)
             }
             .addOnFailureListener {
-                println("❌ Error al obtener productos: ${it.message}")
+                println("Error al obtener productos: ${it.message}")
                 callback(emptyList())
             }
     }
@@ -38,10 +38,10 @@ class FirestoreRepository {
         db.collection("productos").document(id)
             .delete()
             .addOnSuccessListener {
-                println("🗑️ Producto eliminado exitosamente")
+                println("🗑Producto eliminado exitosamente")
             }
             .addOnFailureListener {
-                println("❌ Error al eliminar producto: ${it.message}")
+                println("Error al eliminar producto: ${it.message}")
             }
     }
 }

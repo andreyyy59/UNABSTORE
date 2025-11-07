@@ -22,23 +22,22 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun HomeScreen(onClickLogout: () -> Unit = {}) {
-
+fun HomeScreen(
+    onClickLogout: () -> Unit = {},
+    repo: FirestoreRepository = FirestoreRepository() // 🔥 Se crea automáticamente
+) {
     val auth = Firebase.auth
-    val repo = FirestoreRepository()
     val productos = remember { mutableStateListOf<Producto>() }
-
     var nombre by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
 
-    // 🟢 Al iniciar, obtener los productos de Firestore
+    // Cargar productos al abrir
     LaunchedEffect(Unit) {
-        repo.obtenerProductos { lista ->
+        repo.obtenerProductos {
             productos.clear()
-            productos.addAll(lista)
+            productos.addAll(it)
         }
     }
 
@@ -46,7 +45,11 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
         topBar = {
             MediumTopAppBar(
                 title = {
-                    Text("Unab Shop", fontWeight = FontWeight.Bold, fontSize = 28.sp)
+                    Text(
+                        "Unab Shop",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp
+                    )
                 },
                 actions = {
                     IconButton(onClick = { }) {
@@ -70,85 +73,83 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
             )
         }
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF5F5F5))
                 .padding(paddingValues)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top
         ) {
-            // 🟩 FORMULARIO PARA AGREGAR PRODUCTOS
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                OutlinedTextField(
-                    value = nombre,
-                    onValueChange = { nombre = it },
-                    label = { Text("Nombre") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = descripcion,
-                    onValueChange = { descripcion = it },
-                    label = { Text("Descripción") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = precio,
-                    onValueChange = { precio = it },
-                    label = { Text("Precio") },
-                    modifier = Modifier.fillMaxWidth()
-                )
 
-                Button(
-                    onClick = {
-                        val nuevo = Producto(
+            // Formulario para agregar producto
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = { nombre = it },
+                label = { Text("Nombre del producto") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = descripcion,
+                onValueChange = { descripcion = it },
+                label = { Text("Descripción") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = precio,
+                onValueChange = { precio = it },
+                label = { Text("Precio") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    if (nombre.isNotEmpty() && precio.isNotEmpty()) {
+                        val nuevoProducto = Producto(
                             nombre = nombre,
                             descripcion = descripcion,
                             precio = precio.toDoubleOrNull() ?: 0.0
                         )
-                        repo.agregarProducto(nuevo)
-                        productos.add(nuevo)
+                        repo.agregarProducto(nuevoProducto)
+                        productos.add(nuevoProducto)
                         nombre = ""
                         descripcion = ""
                         precio = ""
-                    },
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text("Agregar producto")
-                }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Agregar producto")
             }
 
-            Divider(color = Color.Gray, thickness = 1.dp)
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // 🟠 LISTADO DE PRODUCTOS
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
+            // Lista de productos
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(productos) { producto ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(4.dp)
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
                                 Text(producto.nombre, fontWeight = FontWeight.Bold)
                                 Text(producto.descripcion)
-                                Text("$${producto.precio}")
+                                Text("Precio: $${producto.precio}")
                             }
                             IconButton(onClick = {
                                 producto.id?.let { id ->
@@ -156,10 +157,7 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
                                     productos.remove(producto)
                                 }
                             }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Delete,
-                                    contentDescription = "Eliminar"
-                                )
+                                Icon(Icons.Filled.Delete, contentDescription = "Eliminar")
                             }
                         }
                     }
@@ -167,4 +165,10 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewHomeScreen() {
+    HomeScreen()
 }
