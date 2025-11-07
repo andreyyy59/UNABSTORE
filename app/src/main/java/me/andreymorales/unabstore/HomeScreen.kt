@@ -25,7 +25,7 @@ import com.google.firebase.auth.auth
 @Composable
 fun HomeScreen(
     onClickLogout: () -> Unit = {},
-    repo: FirestoreRepository = FirestoreRepository() // 🔥 Se crea automáticamente
+    repo: FirestoreRepository = FirestoreRepository()
 ) {
     val auth = Firebase.auth
     val productos = remember { mutableStateListOf<Producto>() }
@@ -109,6 +109,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (nombre.isNotEmpty() && precio.isNotEmpty()) {
                         val nuevoProducto = Producto(
@@ -123,7 +124,10 @@ fun HomeScreen(
                         precio = ""
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF9900), // Fondo naranja
+                    contentColor = Color.White          // Texto blanco
+                )
             ) {
                 Text("Agregar producto")
             }
@@ -165,10 +169,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
 }
